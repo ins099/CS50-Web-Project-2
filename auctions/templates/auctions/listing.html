@@ -1,0 +1,83 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div  class="container">
+
+	<h2>{{ listing.title }}</h2>
+
+	{% if user.is_authenticated %}
+		<div>
+			<form action="{% url 'listing' listing.id %}" method="post" id="watchlist-form">
+				{% csrf_token %}
+				{% if watchlist %}
+					<input type="submit" value="On Watchlist" class="bg-success input-btn" style="margin-bottom: 1em;">
+				{% else %}
+					<input type="submit" value="Add 2 Watchlist" class="bg-secondary input-btn" style="margin-bottom: 1em;">
+				{% endif %}
+				<input type="hidden" name="listing_id" value="{{ listing.id }}">
+			</form>
+			{% if user.username == listing.author.username %}
+				<form action="{% url 'closebid' %}" method="post">
+					{% csrf_token %}
+					<input type="submit" name="close-btn" value="Close Bid" class="bg-danger input-btn" style="margin-bottom: 1em;">
+					<input type="hidden" name="listing-id" value="{{ listing.id }}">
+				</form>
+			{% endif %}	
+		</div>
+		
+	{% endif %}
+
+
+	{% if listing.img_url != "" %}
+		<img src="{{ listing.img_url }}" width="50%">
+	{% endif %}
+	<h3>Current Bid ${{ current_bid.price }} </h3>
+
+	{% if user.is_authenticated %}
+	<form action="{% url 'bid' %}" method="post" id="newbid-form">
+		{% csrf_token %}
+		<input type="submit" value="Place Bid" class="bg-success input-btn">
+		$ <input type="number" name="price" min="{{ current_bid.price|add:'1' }}">
+		<input type="hidden" name="listing-id" value="{{ listing.id }}">
+		<input type="hidden" name="author" value="{{ user.username }}">
+		<input type="hidden" name="listing-title" value="{{ listing.title }}">
+	</form>
+	{% endif %}
+
+	<br>
+	<h5>Details</h5>
+	<ul>
+		<li>Listed by {{ listing.author }}</li>
+		<li>Category: {{ listing.category }}</li>
+		<li>Date Created: {{ listing.date_created }}</li>
+		<li>Description
+			<p>{{ listing.description }}</p>
+		</li>
+	</ul>
+
+
+	<h5>Comments</h5>
+	<div class="comments-box">
+		{% for comment in comments %}
+			<div>
+				<h6><strong>{{ comment.author }}</strong>  {{ comment.time_stamp }}</h6>
+				<p>{{ comment.comment }}</p>
+			</div>
+		{% endfor %}
+	</div>
+
+	{% if user.is_authenticated %}
+	<div>
+		<strong>Add comment</strong>
+		<form action="{% url 'addcomment' %}" method="post">
+			{% csrf_token %}
+			<input type="submit" class="input-btn bg-primary">
+			<input type="text" name="comment" placeholder="Comment something">
+			<input type="hidden" name="listing-id" value="{{ listing.id }}">
+		</form>
+	</div>
+	{% endif %}
+	
+
+</div>    
+{% endblock %}

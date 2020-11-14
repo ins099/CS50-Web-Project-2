@@ -1,0 +1,30 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% load index %}
+
+<div  class="container">
+	<h2>Categories</h2>
+	{% if listings %}
+		<h4>{{ category }}</h4>
+		<ul>
+			{% for listing in listings %}
+				<li><a href="{% url 'listing' listing.id %}">{{ listing }}</a></li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<ul>
+			{% for category in categories %}
+				<li>
+					<form action="{% url 'categories' %}" method="post">
+						{% csrf_token %}
+						<input type="submit" name="category" value="{{ category }}" class="text-primary category-btn">
+						<input type="hidden" name="selected" value="{{ category }}">
+					</form>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+</div>    
+{% endblock %}

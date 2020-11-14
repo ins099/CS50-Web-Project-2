@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div  class="container">
+
+	<h3>The {{ listing.title }} listing has ended</h3>
+
+	{% if winner_bid.author.username == user.username %}
+
+		<h1>Congratulations! Your bid was the winner</h1>
+		<h5>Details of the auction</h5>
+		<ul>
+			<li>Title: {{ listing.title }}</li>
+			<li>Listed by {{ listing.author }}</li>
+			<li>Category: {{ listing.category }}</li>
+			<li>Date Created: {{ listing.date_created }}</li>
+			<li>Description
+				<p>{{ listing.description }}</p>
+			</li>
+			<li>Last bid {{ winner_bid.price }} USD</li>
+		</ul>
+
+	{% else %}
+		<p>The winner bid was {{ winner_bid.price }} USD from {{ winner_bid.author }}</p>
+	{% endif %}
+
+	<a href="{% url 'index' %}">Discover more auctions</a>
+</div>    
+{% endblock %}
