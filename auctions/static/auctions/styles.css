@@ -1,0 +1,28 @@
+body {
+    padding: 10px;
+}
+
+.listing {
+	border: 2px black;
+}
+
+input.input-btn {
+	color: white;
+	border-radius: 5px;
+	border: none;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+input.category-btn {
+	border: none;
+	background: none;
+}
+
+.comments-box {
+	border-radius: 7px;
+	border-color: black;
+	border: 1.5px;
+	border-style: solid;
+	padding: 1.5em;
+}
